@@ -3,14 +3,14 @@ const path = require('node:path');
 
 const { Client, Events, GatewayIntentBits, Collection } = require('discord.js');
 const { REST, Routes } = require('discord.js');
-// const { token, clientid } = require('./config.json');
+const { token, clientid } = require('./config.json');
 
 process.on('unhandledRejection', error => {
 	console.error('Unhandled promise rejection:', error);
 });
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
-const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
+const rest = new REST({ version: '10' }).setToken(token);
 
 const commands = [];
 client.commands = new Collection();
@@ -59,5 +59,4 @@ client.on(Events.InteractionCreate, async msg => {
 	}
 });
 
-client.login(process.env.TOKEN);
-module.exports = client;
+client.login(token);
