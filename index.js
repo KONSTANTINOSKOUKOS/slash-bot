@@ -30,7 +30,7 @@ for (const file of files) {
   }
 }
 
-rest.put(Routes.applicationCommands('1035163453150740510'), { body: commands })
+rest.put(Routes.applicationCommands('1036229560376754247'), { body: commands })
   .then(data => console.log(`Successfully registered ${data.length} application commands.`));
 
 client.on(Events.InteractionCreate, async msg => {
