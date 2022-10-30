@@ -10,7 +10,7 @@ process.on('unhandledRejection', error => {
 });
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
-const rest = new REST({ version: '10' }).setToken(token);
+const rest = new REST({ version: '10' }).setToken(process.env.TOKEN | token);
 
 const commands = [];
 client.commands = new Collection();
