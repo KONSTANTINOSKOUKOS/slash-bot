@@ -3,14 +3,14 @@ const path = require('node:path');
 
 const { Client, Events, GatewayIntentBits, Collection } = require('discord.js');
 const { REST, Routes } = require('discord.js');
-const { token, clientid } = require('./config.json');
+// const { token, clientid } = require('./config.json');
 
 process.on('unhandledRejection', error => {
 	console.error('Unhandled promise rejection:', error);
 });
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
-const rest = new REST({ version: '10' }).setToken(token);
+const rest = new REST({ version: '10' }).setToken(process.env['token']);
 
 const commands = [];
 client.commands = new Collection();
@@ -35,8 +35,7 @@ rest.put(Routes.applicationCommands('1035163453150740510'), { body: commands })
 
 client.on(Events.InteractionCreate, async msg => {
 	if (!msg.isChatInputCommand()) return;
-	// await msg.deferReply({ fetchReply: true });
-	console.log(msg.deferred);
+	await msg.deferReply({ fetchReply: true });
 
 	const cmd = client.commands.get(msg.commandName);
 	console.log(cmd);
@@ -46,12 +45,6 @@ client.on(Events.InteractionCreate, async msg => {
 		return;
 	}
 
-	rest.post(Routes.channelMessages(msg.channelId), {
-		body: {
-			content: 'A message via REST!',
-		},
-	});
-
 	try {
 		return await cmd.run(msg);
 	} catch (error) {
@@ -59,4 +52,4 @@ client.on(Events.InteractionCreate, async msg => {
 	}
 });
 
-client.login(token);
+client.login(process.env['token']);

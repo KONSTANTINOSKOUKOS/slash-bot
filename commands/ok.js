@@ -5,7 +5,6 @@ module.exports = {
         .setName('ok')
         .setDescription('says ok'),
     async run(msg) {
-        await msg.deferReply();
         await msg.editReply('ok');
     },
 };
