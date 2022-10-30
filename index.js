@@ -33,7 +33,7 @@ for (const file of files) {
 	}
 }
 
-rest.put(Routes.applicationCommands(clientid), { body: commands })
+rest.put(Routes.applicationCommands('1035163453150740510'), { body: commands })
 	.then(data => console.log(`Successfully registered ${data.length} application commands.`));
 
 client.on(Events.InteractionCreate, async msg => {
@@ -62,4 +62,5 @@ client.on(Events.InteractionCreate, async msg => {
 	}
 });
 
-client.login(token);
+client.login(process.env.TOKEN | token);
+module.exports = client;
