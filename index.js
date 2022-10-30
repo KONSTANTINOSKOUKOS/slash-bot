@@ -10,7 +10,7 @@ process.on('unhandledRejection', error => {
 });
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
-const rest = new REST({ version: '10' }).setToken(process.env.TOKEN | token);
+const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
 
 const commands = [];
 client.commands = new Collection();
@@ -59,5 +59,5 @@ client.on(Events.InteractionCreate, async msg => {
 	}
 });
 
-client.login(process.env.TOKEN | token);
+client.login(process.env.TOKEN);
 module.exports = client;
