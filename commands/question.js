@@ -1,5 +1,4 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { request } = require('undici');
 const wa = require('wolfram-alpha-node')(process.env['appid']);
 
 module.exports = {
