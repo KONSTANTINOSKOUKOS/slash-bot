@@ -53,3 +53,19 @@ client.on(Events.InteractionCreate, async msg => {
 });
 
 client.login(process.env['token']);
+
+
+///////////////////////////////////////    KEEP ALIVE    //////////////////////////////////
+const http = require('http');
+
+http.createServer((req, res) => {   
+  res.write("alive");   
+  res.end(); 
+}).listen(8080);
+
+client.on('ready', () => {
+  console.log('bot alive')
+  const activities = ['with da niggers', 'with da boys', 'bing chilling'];
+  let i = 0;
+  setInterval(() => client.user.setActivity(''), 5000);
+  });
