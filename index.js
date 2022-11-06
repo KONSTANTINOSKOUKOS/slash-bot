@@ -3,6 +3,7 @@ const path = require('path');
 
 const { Client, Events, GatewayIntentBits, Collection } = require('discord.js');
 const { REST, Routes } = require('discord.js');
+const dmp = require('discord-music-player');
 // const { token, clientid } = require('./config.json');
 
 process.on('unhandledRejection', error => {
