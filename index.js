@@ -3,7 +3,7 @@ const path = require('path');
 
 const { Client, Events, GatewayIntentBits, Collection } = require('discord.js');
 const { REST, Routes } = require('discord.js');
-const dmp = require('discord-music-player');
+const {Player} = require('discord-music-player');
 // const { token, clientid } = require('./config.json');
 
 process.on('unhandledRejection', error => {
@@ -34,7 +34,15 @@ for (const file of files) {
 rest.put(Routes.applicationCommands('1036229560376754247'), { body: commands })
   .then(data => console.log(`Successfully registered ${data.length} application commands.`));
 
+///////////////////////////////////////////   VOICE    ///////////////////////////
+const player = new Player(client,{
+  leaveOnEmpty: true
+}); 
+client.player = player;
+///////////////////////////////////////////   VOICE    ///////////////////////////
+
 client.on(Events.InteractionCreate, async msg => {
+  // const q = player.getQueue(msg.guildId);
   if (!msg.isChatInputCommand()) return;
   await msg.deferReply();
 
