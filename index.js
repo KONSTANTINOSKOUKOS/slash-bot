@@ -3,14 +3,14 @@ const path = require('path');
 
 const { Client, Events, GatewayIntentBits, Collection } = require('discord.js');
 const { REST, Routes } = require('discord.js');
-const {Player} = require('discord-music-player');
+const { Player } = require('discord-player');
 // const { token, clientid } = require('./config.json');
 
 process.on('unhandledRejection', error => {
   console.error('Unhandled promise rejection:', error);
 });
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildVoiceStates,] });
 const rest = new REST({ version: '10' }).setToken(process.env['token']);
 
 const commands = [];
@@ -35,14 +35,16 @@ rest.put(Routes.applicationCommands('1036229560376754247'), { body: commands })
   .then(data => console.log(`Successfully registered ${data.length} application commands.`));
 
 ///////////////////////////////////////////   VOICE    ///////////////////////////
-const player = new Player(client,{
-  leaveOnEmpty: true
-}); 
+const player = new Player(client, {
+  initialVolume: 100, ytdlOptions: { quality: 'lowestaudio' }
+});
+player.on('error', (q, e) => { console.log(e) });
+player.on('connectionError', (q, e) => { console.log(e) });
+player.on('connectionCreate', (q, c) => { console.log('lol\n', c) });
 client.player = player;
 ///////////////////////////////////////////   VOICE    ///////////////////////////
 
 client.on(Events.InteractionCreate, async msg => {
-  // const q = player.getQueue(msg.guildId);
   if (!msg.isChatInputCommand()) return;
   await msg.deferReply();
 
@@ -63,14 +65,15 @@ client.on(Events.InteractionCreate, async msg => {
 
 client.login(process.env['token']);
 ///////////////////////////////////////    KEEP ALIVE    //////////////////////////////////
-const http = require('http');
 
-http.createServer((req, res) => {
-  res.write("alive");
-  res.end();
-}).listen(8080);
+// const http = require('http');
 
-client.on('ready', () => {
-  console.log('bot alive')
-  setInterval(() => client.user.setActivity(''), 5000);
-});
+// http.createServer((req, res) => {
+//   res.write("alive");
+//   res.end();
+// }).listen(8080);
+
+// client.on('ready', () => {
+//   console.log('bot alive')
+//   setInterval(() => client.user.setActivity(''), 5000);
+// });
