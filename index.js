@@ -4,14 +4,15 @@ const path = require('path');
 const { Client, Events, GatewayIntentBits, Collection } = require('discord.js');
 const { REST, Routes } = require('discord.js');
 const { Player } = require('discord-player');
-// const { token, clientid } = require('./config.json');
+
+require('dotenv').config();
 
 process.on('unhandledRejection', error => {
   console.error('Unhandled promise rejection:', error);
 });
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildVoiceStates,] });
-const rest = new REST({ version: '10' }).setToken(process.env['token']);
+const rest = new REST({ version: '10' }).setToken(process.env.token);
 
 const commands = [];
 client.commands = new Collection();
@@ -63,7 +64,7 @@ client.on(Events.InteractionCreate, async msg => {
   }
 });
 
-client.login(process.env['token']);
+client.login(process.env.token);
 ///////////////////////////////////////    KEEP ALIVE    //////////////////////////////////
 
 // const http = require('http');

@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const wa = require('wolfram-alpha-node')(process.env['appid']);
+const wa = require('wolfram-alpha-node')(process.env.appid);
 
 module.exports = {
   data: new SlashCommandBuilder()
