@@ -2,8 +2,8 @@ const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName('play')
-    .setDescription('Παίζει ένα τραγούδι(με όνομα ή link σε playlist) στο voice channel στο οποίο βρίσκεστε')
+    .setName('add')
+    .setDescription('Προσθέτει τραγούδια στην λίστα (εάν είναι το πρώτο θα παίξει στο voice channel στο οποίο βρίσκεστε)')
     .addStringOption(opt => {
       return opt
         .setName('song')
@@ -34,6 +34,20 @@ module.exports = {
     if (!song) return await msg.editReply('Δυστυχώς δεν μπόρεσα να βρω αυτό το τραγούδι στο Youtube ή το Spotify');
 
     queue.play(song);
-    await msg.editReply(`Τώρα παίζει **${queue.nowPlaying().title}**`);
+    console.log(queue.tracks.length);
+    
+    if(queue.tracks.length==0)
+      return await msg.editReply(`Τώρα παίζει **${queue.nowPlaying().title}**`);
+    else
+      return await msg.editReply(`Προστέθηκε το **${song}** στην λίστα`);
+      
+    // queue.addTrack(song);
+    
+    // if (queue.tracks.length == 1) {//Αν είναι το πρώτο, παίξε το κιόλας
+    //   queue.play(song);
+    //   return await msg.editReply(`Τώρα παίζει **${queue.nowPlaying().title}**`);
+    // } else {
+    //   return await msg.editReply(`Προστέθηκε το **${song}** στην λίστα`);
+    // }
   },
 };

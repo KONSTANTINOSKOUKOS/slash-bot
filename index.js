@@ -5,8 +5,6 @@ const { Client, Events, GatewayIntentBits, Collection } = require('discord.js');
 const { REST, Routes } = require('discord.js');
 const { Player } = require('discord-player');
 
-require('dotenv').config();
-
 process.on('unhandledRejection', error => {
   console.error('Unhandled promise rejection:', error);
 });
@@ -41,7 +39,6 @@ const player = new Player(client, {
 });
 player.on('error', (q, e) => { console.log(e) });
 player.on('connectionError', (q, e) => { console.log(e) });
-player.on('connectionCreate', (q, c) => { console.log('lol\n', c) });
 client.player = player;
 ///////////////////////////////////////////   VOICE    ///////////////////////////
 
