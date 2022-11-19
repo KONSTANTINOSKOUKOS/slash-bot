@@ -5,6 +5,10 @@ module.exports = {
     .setName('queue')
     .setDescription('Απαντά με τα τραγούδια της λίστας'),
   async run(msg) {
-    await msg.editReply(`queue`);
+    const queue = msg.client.player.getQueue(msg.guild);
+    console.log(queue.tracks);
+    const list = [];
+    queue.tracks.forEach((song) => list.push(`${song.title}\n`));
+    return await msg.editReply(list.join(''));
   },
 };

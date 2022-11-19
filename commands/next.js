@@ -5,7 +5,8 @@ module.exports = {
     .setName('next')
     .setDescription('Παίζει το επόμενο τραγούδι στην λίστα'),
   async run(msg) {
-    msg.client.player.getQueue(msg.guild).skip();
-    return await msg.editReply(`Τώρα παίζει **${msg.client.player.getQueue(msg.guild).nowPlaying().title}**`);
+    const queue = msg.client.player.getQueue(msg.guild);
+    queue.next();
+    return await msg.editReply(`Τώρα παίζει **[${queue.nowPlaying().title}](${queue.nowPlaying().url})**`);
   },
 };

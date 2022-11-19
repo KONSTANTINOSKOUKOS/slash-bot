@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const wa = require('wolfram-alpha-node')(process.env.appid);
 
 module.exports = {
@@ -13,9 +13,14 @@ module.exports = {
   async run(msg) {
     try {
       const res = await wa.getShort(msg.options.getString('question', true));
-
       console.log(res);
-      await msg.editReply(res);
+
+      const embed = new EmbedBuilder()
+        // .setColor(0x7289DA)
+        .setTitle(msg.options.getString('question', true))
+        .setDescription(res);
+
+      await msg.editReply({ embeds: [embed] });
     } catch (e) {
       console.log(e);
       if (e == 'Error: Wolfram|Alpha did not understand your input')

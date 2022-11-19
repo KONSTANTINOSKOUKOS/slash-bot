@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { request } = require('undici');
 
 module.exports = {
@@ -9,6 +9,10 @@ module.exports = {
     const { body } = await request('https://v2.jokeapi.dev/joke/Miscellaneous,Dark,Pun,Spooky,Christmas?blacklistFlags=nsfw,religious');
     const data = await body.json();
     console.log(data);
-    return await msg.editReply(data.setup ? `${data.setup}\n${data.delivery}` : data.joke);
+    const embed = new EmbedBuilder()
+      // .setColor(0x7289DA)
+      .setTitle(data.setup ? `${data.setup}\n${data.delivery}` : data.joke);
+
+    return await msg.editReply({ embeds: [embed] });
   },
 };

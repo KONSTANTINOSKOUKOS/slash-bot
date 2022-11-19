@@ -5,7 +5,8 @@ module.exports = {
     .setName('prev')
     .setDescription('Παίζει το προηγούμενο τραγούδι'),
   async run(msg) {
-    msg.client.player.getQueue(msg.guild).back();
-    return await msg.editReply(`Τώρα παίζει **${msg.client.player.getQueue(msg.guild).nowPlaying().title}**`);
+    const queue = msg.client.player.getQueue(msg.guild);
+    queue.back();
+    return await msg.editReply(`Τώρα παίζει **[${queue.nowPlaying().title}](${queue.nowPlaying().url})**`);
   },
 };
