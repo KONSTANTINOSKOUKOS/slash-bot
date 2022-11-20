@@ -12,15 +12,20 @@ module.exports = {
     }),
   async run(msg) {
     const id = msg.member.voice.channelId;
-    console.log(id);
     if (!id)
       return await msg.editReply('Πρέπει να μπεις σε ένα voice channel πρώτα!');
-    const queue = msg.client.player.getQueue(msg.guild) ?? msg.client.player.createQueue(msg.guild, {
-      metadata: {
-        channel: msg.channel
-      }
-    });
 
+    let queue = msg.client.player.getQueue(msg.guild);
+    if (!queue) {
+      queue = msg.client.player.createQueue(msg.guild, {
+        metadata: {
+          channel: msg.channel
+        }
+      });
+      console.log('new queue!!!!!!');
+    } else {
+      console.log('old queue!!!!!!');
+    }
     try {
       if (!queue.connection) await queue.connect(msg.member.voice.channel);
     } catch {
@@ -33,13 +38,11 @@ module.exports = {
     }).then(res => res.tracks[0]);
     if (!song) return await msg.editReply('Δυστυχώς δεν μπόρεσα να βρω αυτό το τραγούδι στο Youtube ή το Spotify');
 
-    queue.play(song);
-    console.log(queue.tracks);
-
+    msg.client.playlist.push(song);
     if (!queue.playing) {
-      return await msg.editReply(`Τώρα παίζει **[${queue.nowPlaying().title}](${queue.nowPlaying().url})**`);
+      queue.play(song);
+      msg.client.now = song;
     }
-    else
-      return await msg.editReply(`Προστέθηκε στην λίστα το **[${queue.nowPlaying().title}](${queue.nowPlaying().url})**`);
+    return await msg.editReply(`${!queue.playing ? 'Τώρα παίζει' : 'Προστέθηκε στην λίστα το'} **[${song.title}](${song.url})**`);
   },
 };

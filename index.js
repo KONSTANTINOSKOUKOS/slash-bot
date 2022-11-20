@@ -39,16 +39,12 @@ const player = new Player(client, {
 });
 player.on('error', (q, e) => { console.log(e) });
 player.on('connectionError', (q, e) => { console.log(e) });
-player.on('trackStart', async (q, e) => {
-  if (e) console.log(e);
-  // client.(`Τώρα παίζει **${q.nowPlaying().title}**`);
-})
 client.player = player;
+client.playlist = [];
+client.now = {};//own implementation
 ///////////////////////////////////////////   VOICE    ///////////////////////////
 
 client.on(Events.InteractionCreate, async msg => {
-  player.removeAllListeners('trackStart');
-
   if (!msg.isChatInputCommand()) return;
   await msg.deferReply();
 
