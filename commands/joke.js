@@ -10,7 +10,7 @@ module.exports = {
     const data = await body.json();
     console.log(data);
     const embed = new EmbedBuilder()
-      // .setColor(0x7289DA)
+      .setColor(0x7289DA)
       .setTitle(data.setup ? `${data.setup}\n${data.delivery}` : data.joke);
 
     return await msg.editReply({ embeds: [embed] });

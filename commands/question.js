@@ -16,7 +16,7 @@ module.exports = {
       console.log(res);
 
       const embed = new EmbedBuilder()
-        // .setColor(0x7289DA)
+        .setColor(0x7289DA)
         .setTitle(msg.options.getString('question', true))
         .setDescription(res);
 

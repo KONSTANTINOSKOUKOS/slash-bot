@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -8,7 +8,23 @@ module.exports = {
     const queue = msg.client.player.getQueue(msg.guild);
     if (msg.client.playlist.length == 0) return await msg.editReply('Δεν υπάρχουν τραγούδια στην λίστα');
     const list = [];
-    msg.client.playlist.forEach((song) => list.push(`${song.title}\n`));
-    return await msg.editReply(list.join(''));
+    msg.client.playlist.forEach((song) => list.push(`${song == msg.client.now ? ':arrow_forward: ' : ''}${song.title}\n`));
+    const embed = new EmbedBuilder()
+      .setColor(0x7289DA)
+      .setDescription(`**${list.join('')}**`);
+
+    const row = new ActionRowBuilder()
+			.addComponents(
+				new ButtonBuilder()
+					.setCustomId('right')
+					.setLabel('U+203A')
+					.setStyle(ButtonStyle.Primary),
+        new ButtonBuilder()
+					.setCustomId('left')
+					.setLabel('U+2039')
+					.setStyle(ButtonStyle.Primary),
+			);
+
+    return await msg.editReply({ embeds: [embed], components:[row] });
   },
 };
