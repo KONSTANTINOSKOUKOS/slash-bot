@@ -5,7 +5,6 @@ module.exports = {
     .setName('pause')
     .setDescription('Σταματάει την μουσική'),
   async run(msg) {
-    console.log('aaaaa\n',msg.guild);
     msg.client.player.getQueue(msg.guild).setPaused(true);
     return await msg.editReply('Η μουσική σταμάτησε');
   },

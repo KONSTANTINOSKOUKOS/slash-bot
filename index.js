@@ -45,8 +45,28 @@ client.now = {};//own implementation
 ///////////////////////////////////////////   VOICE    ///////////////////////////
 
 client.on(Events.InteractionCreate, async msg => {
-  if (!msg.isChatInputCommand()) return;
   await msg.deferReply();
+  if(msg.isButton()) {
+    const queue = msg.client.player.getQueue(msg.guild);
+    switch(msg.customId) {
+      case 'left':
+        if (msg.client.playlist.indexOf(msg.client.now) == 0) return await msg.reply('Δεν υπάρχει προηγούμενο τραγούδι');//if first song
+        const lsong = msg.client.playlist[msg.client.playlist.indexOf(msg.client.now) - 1];
+        queue.play(lsong,{immediate: true });
+        msg.client.now = lsong;
+        return await msg.editReply(`Τώρα παίζει **[${lsong.title}](${lsong.url})**`);
+      return;
+      case 'right':
+        if (msg.client.playlist.length - 1 == msg.client.playlist.indexOf(msg.client.now)) return await msg.reply('Δεν υπάρχει επόμενο τραγούδι');//if last song
+        const rsong = msg.client.playlist[msg.client.playlist.indexOf(msg.client.now) + 1];
+        queue.play(rsong,{immediate: true });
+        msg.client.now = rsong;
+        return await msg.editReply(`Τώρα παίζει **[${rsong.title}](${rsong.url})**`);
+      return;
+    }
+  }
+  
+  if (!msg.isChatInputCommand()) return;
 
   const cmd = client.commands.get(msg.commandName);
   console.log(cmd);
