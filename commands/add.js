@@ -57,7 +57,7 @@ module.exports = {
       console.log('yt playlist');
       res = await msg.client.player.search(string, {
         requestedBy: msg.user,
-        searchEngine: 'YOUTUBE_PlAYLIST'
+        searchEngine: 'YOUTUBE_PLAYLIST'
       }).then(res =>{console.log(res); return res.tracks;});
       
     } else if(string.includes('https://open.spotify.com/track')) {//SPOTIFY SONG
@@ -70,7 +70,7 @@ module.exports = {
       console.log('spotify playlist');
       res = await msg.client.player.search(string, {
         requestedBy: msg.user,
-        searchEngine: 'SPOTIFY_PlAYLIST'
+        searchEngine: 'SPOTIFY_PLAYLIST'
       }).then(res => res.tracks);
     } else {
       res = await msg.client.player.search(string, {

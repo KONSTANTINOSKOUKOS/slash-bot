@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const { Client, Events, GatewayIntentBits, Collection } = require('discord.js');
+const { Client, Events, GatewayIntentBits, Collection, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require('discord.js');
 const { REST, Routes } = require('discord.js');
 const { Player } = require('discord-player');
 
@@ -44,28 +44,53 @@ client.playlist = [];
 client.now = {};//own implementation
 ///////////////////////////////////////////   VOICE    ///////////////////////////
 
+const makelistembed = () => {
+  let list = [];
+  client.playlist.forEach((song) => {
+    const playing = song == client.now;
+    list.push(`${playing ? `:arrow_forward:__[${song.title}](${song.url})__` : `[${song.title}](${song.url})`}\n`);
+  });
+  return new EmbedBuilder()
+    .setColor(0x404EED)
+    .setDescription(`**${list.join('')}**`);
+}
+
+const row = new ActionRowBuilder()
+  .addComponents(
+    new ButtonBuilder()
+      .setCustomId('left')
+      .setLabel('◀️')
+      .setStyle(ButtonStyle.Secondary),
+    new ButtonBuilder()
+      .setCustomId('right')
+      .setLabel('▶️')
+      .setStyle(ButtonStyle.Secondary));
+
+
 client.on(Events.InteractionCreate, async msg => {
   await msg.deferReply();
-  if(msg.isButton()) {
+  if (msg.isButton()) {
     const queue = msg.client.player.getQueue(msg.guild);
-    switch(msg.customId) {
+    switch (msg.customId) {
       case 'left':
         if (msg.client.playlist.indexOf(msg.client.now) == 0) return await msg.reply('Δεν υπάρχει προηγούμενο τραγούδι');//if first song
         const lsong = msg.client.playlist[msg.client.playlist.indexOf(msg.client.now) - 1];
-        queue.play(lsong,{immediate: true });
+        queue.play(lsong, { immediate: true });
         msg.client.now = lsong;
-        return await msg.editReply(`Τώρα παίζει **[${lsong.title}](${lsong.url})**`);
-      return;
+        await msg.editReply(`Τώρα παίζει **[${lsong.title}](${lsong.url})**`);
+        await msg.followUp({ embeds: [makelistembed()], components: [row] });
+        return;
       case 'right':
         if (msg.client.playlist.length - 1 == msg.client.playlist.indexOf(msg.client.now)) return await msg.reply('Δεν υπάρχει επόμενο τραγούδι');//if last song
         const rsong = msg.client.playlist[msg.client.playlist.indexOf(msg.client.now) + 1];
-        queue.play(rsong,{immediate: true });
+        queue.play(rsong, { immediate: true });
         msg.client.now = rsong;
-        return await msg.editReply(`Τώρα παίζει **[${rsong.title}](${rsong.url})**`);
-      return;
+        await msg.editReply(`Τώρα παίζει **[${rsong.title}](${rsong.url})**`);
+        await msg.followUp({ embeds: [makelistembed()], components: [row] });
+        return;
     }
   }
-  
+
   if (!msg.isChatInputCommand()) return;
 
   const cmd = client.commands.get(msg.commandName);
