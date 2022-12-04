@@ -10,9 +10,9 @@ module.exports = {
 
     const makelistembed = () => {
       let list = [];
-      msg.client.playlist.forEach((song) => {
+      msg.client.playlist.forEach((song, i) => {
         const playing = song == msg.client.now;
-        list.push(`${playing ? `:arrow_forward:__[${song.title}](${song.url})__` : `[${song.title}](${song.url})`}\n`);
+        list.push(`${playing ? `:arrow_forward:__[${song.title}](${song.url})__` : `[${song.title}](${song.url})`} [${i + 1}] \n`);
       });
       return new EmbedBuilder()
         .setColor(0x404EED)

@@ -61,26 +61,27 @@ module.exports = {
     }
 
     isPlaylist = searchEngine.includes('PLAYLIST');
-    console.log(searchEngine,isPlaylist);
+    console.log(isPlaylist);
 
     const res = await msg.client.player.search(string, {
       requestedBy: msg.user,
-      // searchEngine: searchEngine
-    }).then(res => {return isPlaylist ? res.tracks : res.tracks[0] });
+    }).then(res => {
+      console.log(res.tracks);
+      return isPlaylist ? res : res.tracks[0]
+    });
     if (!res) return await msg.editReply('Δυστυχώς δεν μπόρεσα να βρω αυτό που ζητάς!');
 
-    console.log(res);
-    
-    if(isPlaylist) msg.client.playlist.push(...res);
+
+    if (isPlaylist) msg.client.playlist.push(...res.tracks);
     else msg.client.playlist.push(res);
-    const song = isPlaylist ? res[0] : res;
+    const song = isPlaylist ? res.tracks[0] : res;
 
     if (!queue.playing) {
       queue.play(song);
       msg.client.now = song;
     }
 
-    const msgg = !queue.playing ? `Τώρα παίζει **[${song.title}](${song.url})**` : `Προστέθηκε το ${isPlaylist ? `**[${res.title}](${res.url})**` : `**[${song.title}](${song.url})**`}`;
+    const msgg = !queue.playing ? `Τώρα παίζει **[${song.title}](${song.url})**` : `Προστέθηκε το ${isPlaylist ? `**[${res.playlist.title}](${res.playlist.url})**` : `**[${song.title}](${song.url})**`}`;
     return await msg.editReply(msgg);
 
     /////////////////////////////////////////////////////////////////////////////////////////
