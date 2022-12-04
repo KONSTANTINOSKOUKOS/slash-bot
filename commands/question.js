@@ -23,7 +23,7 @@ module.exports = {
       await msg.editReply({ embeds: [embed] });
     } catch (e) {
       console.log(e);
-      if (e == 'Error: Wolfram|Alpha did not understand your input' ||e == 'Error: No short answer available')
+      if (e == 'Error: Wolfram|Alpha did not understand your input' || e == 'Error: No short answer available')
         await msg.editReply('Δεν μπόρεσα να καταλάβω την ερώτησή σου');
     }
   },
