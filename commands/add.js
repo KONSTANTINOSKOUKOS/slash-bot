@@ -56,11 +56,14 @@ module.exports = {
       searchEngine = 'SPOTIFY_SONG';
     } else if (string.includes('https://open.spotify.com/playlist')) {
       searchEngine = 'SPOTIFY_PLAYLIST';
+    } else if (string.includes('https://open.spotify.com/album')) {
+      searchEngine = 'SPOTIFY_ALBUM';
+      isPlaylist = true;
     } else {
       searchEngine = 'AUTO';
     }
 
-    isPlaylist = searchEngine.includes('PLAYLIST');
+    isPlaylist = searchEngine.includes('PLAYLIST') || searchEngine.includes('ALBUM');
     console.log(isPlaylist);
 
     const res = await msg.client.player.search(string, {
